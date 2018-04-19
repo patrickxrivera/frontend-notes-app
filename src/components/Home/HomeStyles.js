@@ -38,14 +38,16 @@ export const SubDescription = styled.div`
   font-weight: 300;
 `;
 
-export const Btn = styled.div`
-  line-height: 24px;
+export const Btn = styled.button`
+  font-size: inherit;
+  width: 100%;
+  cursor: pointer;
   margin-top: 10px;
   padding: 0.2rem;
   border-radius: 3px;
   text-align: center;
   font-weight: 500;
-  height: 25px;
+  height: 30px;
   background: rgba(235, 87, 87, 0.03);
   color: rgb(235, 87, 87);
   border: 1px solid rgb(249, 200, 200);
@@ -53,5 +55,8 @@ export const Btn = styled.div`
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
     transition: background-color 0.2s ease-in;
+  }
+  &:focus {
+    outline: 0;
   }
 `;
