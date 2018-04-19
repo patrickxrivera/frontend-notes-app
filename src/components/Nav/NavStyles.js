@@ -19,6 +19,12 @@ export const Title = styled.span`
 
 export const Action = styled.span`
   margin: 0 0.8rem;
+  padding: 5px 8px;
+  &:hover {
+    background: rgba(58, 56, 52, 0.08);
+    border-radius: 4px;
+    transition: background 0.1s ease-in;
+  }
 `;
 
 export const Auth = styled.div`

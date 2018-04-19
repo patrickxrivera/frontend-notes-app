@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Nav from '../Nav/Nav';
 import Home from '../Home/Home';
+import SignUp from '../Auth/SignUp/SignUp';
 import { Wrapper } from './AppStyles';
 
 const App = () => (
@@ -12,6 +13,7 @@ const App = () => (
       <Wrapper>
         <Nav />
         <Route exact path="/" component={Home} />
+        <Route exact path="/signup" component={SignUp} />
       </Wrapper>
     </Router>
   </MuiThemeProvider>

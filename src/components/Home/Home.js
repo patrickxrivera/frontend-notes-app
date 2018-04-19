@@ -1,5 +1,5 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Link } from 'react-router-dom';
 
 import {
   Wrapper,
@@ -9,6 +9,7 @@ import {
   SubDescription,
   Btn
 } from './HomeStyles.js';
+import { linkStyle } from '../../utils/styles';
 
 const Home = ({}) => (
   <Wrapper>
@@ -18,7 +19,9 @@ const Home = ({}) => (
         Write, plan, collaborate, and get organized. <br />
         Notes.io is all you need — in one tool.
       </Description>
-      <Btn type="submit">Get Started</Btn>
+      <a style={linkStyle} href="/signup">
+        <Btn type="submit">Get Started</Btn>
+      </a>
       <SubDescription>
         For teams & individuals - iOS and Mac coming soon.
       </SubDescription>
