@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField';
 import { map, curry, reduce } from 'ramda';
 
+import Nav from '../../Nav/Nav';
 import formFields from '../utils/formFieldData';
 import { signInUser } from '../../../actions/auth';
 import { getAuthErrorFrom } from '../../../reducers/errors';
@@ -62,17 +63,20 @@ class SignIn extends Component {
     const [firstName, ...signInFields] = formFields; // don't render firstName on sign in form
 
     return (
-      <Wrapper>
-        <FormWrapper onSubmit={handleSubmit(this.handleFormSubmit)} pathname={pathname}>
-          <Title>Welcome Back!</Title>
-          <Form>
-            {this.renderFields(signInFields, errorMsg)}
-            <Btn style={btnStyle} type="submit">
-              Sign in
-            </Btn>
-          </Form>
-        </FormWrapper>
-      </Wrapper>
+      <div>
+        <Nav />
+        <Wrapper>
+          <FormWrapper onSubmit={handleSubmit(this.handleFormSubmit)} pathname={pathname}>
+            <Title>Welcome Back!</Title>
+            <Form>
+              {this.renderFields(signInFields, errorMsg)}
+              <Btn style={btnStyle} type="submit">
+                Sign in
+              </Btn>
+            </Form>
+          </FormWrapper>
+        </Wrapper>
+      </div>
     );
   }
 }

@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField';
 import { map, curry, reduce } from 'ramda';
 
+import Nav from '../../Nav/Nav';
 import formFields from '../utils/formFieldData';
 import { signUpUser } from '../../../actions/auth';
 import { getAuthErrorFrom } from '../../../reducers/errors';
@@ -76,17 +77,20 @@ class SignUp extends Component {
     const { handleSubmit, errorMsg, location: { pathname } } = this.props;
 
     return (
-      <Wrapper>
-        <FormWrapper onSubmit={handleSubmit(this.handleFormSubmit)} pathname={pathname}>
-          <Title>Get started absolutely free!</Title>
-          <Form>
-            {this.renderFields(errorMsg)}
-            <Btn style={btnStyle} type="submit">
-              Sign up
-            </Btn>
-          </Form>
-        </FormWrapper>
-      </Wrapper>
+      <div>
+        <Nav />
+        <Wrapper>
+          <FormWrapper onSubmit={handleSubmit(this.handleFormSubmit)} pathname={pathname}>
+            <Title>Get started absolutely free!</Title>
+            <Form>
+              {this.renderFields(errorMsg)}
+              <Btn style={btnStyle} type="submit">
+                Sign up
+              </Btn>
+            </Form>
+          </FormWrapper>
+        </Wrapper>
+      </div>
     );
   }
 }
