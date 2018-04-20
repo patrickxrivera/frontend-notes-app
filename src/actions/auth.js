@@ -9,13 +9,10 @@ export const signUpUser = ({ firstName, username, password }, callback) => {
       .post(signUpUserEndpoint, { firstName, username, password })
       .then(({ data }) => {
         dispatch({ type: 'AUTH_USER', payload: data });
-        // localStorage.setItem('isAuthenticated', 'true')
         callback();
       })
-      .catch((error) => {
-        console.log(error);
-        // const errorMsg = 'Email has already been used.';
-        // dispatch(authError(errorMsg));
+      .catch(({ response }) => {
+        dispatch({ type: 'AUTH_ERROR', payload: response.data.error });
       });
   };
 };

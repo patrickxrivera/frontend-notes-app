@@ -9,7 +9,6 @@ export default handleActions(
   {
     AUTH_USER: (state, action) => {
       const { token, userId, firstName } = action.payload;
-
       return {
         ...state,
         isAuthenticated: true,
@@ -19,11 +18,10 @@ export default handleActions(
       };
     },
     AUTH_ERROR: (state, action) => {
-      const errorMsg = action.payload;
-      console.log(errorMsg);
+      const error = action.payload;
       return {
         ...state,
-        errorMsg
+        errorMsg: error
       };
     }
   },
