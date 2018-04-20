@@ -24,8 +24,8 @@ class SignIn extends Component {
   handleFormSubmit = (formProps) => {
     const { signInUser, history } = this.props;
 
-    signInUser(formProps, (userId) => {
-      history.push(`/${userId}`);
+    signInUser(formProps, (username) => {
+      history.push(`/${username}`);
     });
   };
 

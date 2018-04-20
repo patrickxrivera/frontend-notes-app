@@ -24,8 +24,8 @@ class SignUp extends Component {
   handleFormSubmit = (formProps) => {
     const { signUpUser, history } = this.props;
 
-    signUpUser(formProps, (userId) => {
-      history.push(`/${userId}`);
+    signUpUser(formProps, (username) => {
+      history.push(`/${username}`);
     });
   };
 
