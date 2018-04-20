@@ -1,6 +1,6 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Nav from '../Nav/Nav';
 import Home from '../Home/Home';
@@ -13,9 +13,11 @@ const App = () => (
     <Router>
       <Wrapper>
         <Nav />
-        <Route exact path="/" component={Home} />
-        <Route exact path="/signup" component={SignUp} />
-        <Route exact path="/workspace" component={Workspace} />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/:userId" component={Workspace} />
+        </Switch>
       </Wrapper>
     </Router>
   </MuiThemeProvider>

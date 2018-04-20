@@ -12,6 +12,7 @@ export default handleActions(
       return {
         ...state,
         isAuthenticated: true,
+        errorMsg: '',
         token,
         userId,
         firstName
@@ -29,3 +30,5 @@ export default handleActions(
 );
 
 export const getAuthStatusFrom = (state) => state.auth.isAuthenticated;
+
+export const getErrorMsgFrom = (state) => state.auth.errorMsg;

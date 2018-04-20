@@ -9,7 +9,7 @@ export const signUpUser = ({ firstName, username, password }, callback) => {
       .post(signUpUserEndpoint, { firstName, username, password })
       .then(({ data }) => {
         dispatch({ type: 'AUTH_USER', payload: data });
-        callback();
+        callback(data.userId);
       })
       .catch(({ response }) => {
         dispatch({ type: 'AUTH_ERROR', payload: response.data.error });
