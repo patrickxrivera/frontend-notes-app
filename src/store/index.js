@@ -6,31 +6,21 @@ import { loadState, saveState } from './localStorage.js';
 import reducers from '../reducers';
 
 const key = 'state';
-const stateToOmit = ['form'];
+const stateToOmit = ['form', 'errors'];
 
 const persistedState = loadState(key);
 
-const store = createStore(
-  reducers,
-  persistedState,
-  applyMiddleware(reduxThunk)
-);
+const store = createStore(reducers, persistedState, applyMiddleware(reduxThunk));
 
 const save = curry((key, stateToSave) => {
   saveState(stateToSave, key);
 });
 
-const omitFormState = curry((stateToOmit, currentState) =>
-  omit(stateToOmit, currentState)
-);
+const omitFormState = curry((stateToOmit, currentState) => omit(stateToOmit, currentState));
 
 const getCurrentState = (store) => store.getState();
 
-const initSavedState = pipe(
-  getCurrentState,
-  omitFormState(stateToOmit),
-  save(key)
-);
+const initSavedState = pipe(getCurrentState, omitFormState(stateToOmit), save(key));
 
 store.subscribe(() => {
   initSavedState(store);

@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import { map, curry, reduce } from 'ramda';
 
 import formFields from '../utils/formFieldData';
-import { signUpUser } from '../../../actions/auth';
+import { signInUser } from '../../../actions/auth';
 import { getAuthErrorFrom } from '../../../reducers/errors';
 import {
   Wrapper,
@@ -19,70 +19,56 @@ import {
 } from '../utils/AuthFormStyles';
 import { Btn } from '../../Home/HomeStyles';
 
-class SignUp extends Component {
+class SignIn extends Component {
   handleFormSubmit = (formProps) => {
-    const { signUpUser, history } = this.props;
+    const { signInUser, history } = this.props;
 
-    signUpUser(formProps, (userId) => {
+    signInUser(formProps, (userId) => {
       history.push(`/${userId}`);
     });
   };
 
-  renderTextField = ({
-    errorMsg,
-    duplicateUsername,
-    type,
-    input,
-    label,
-    meta: { touched, error }
-  }) => {
-    return (
-      <TextField
-        style={fontStyle}
-        floatingLabelFocusStyle={formFocusStyle}
-        underlineFocusStyle={formFocusStyle}
-        hintText={label}
-        floatingLabelText={label}
-        fullWidth={true}
+  renderTextField = ({ errorMsg, type, input, label, meta: { touched, error } }) => (
+    <TextField
+      style={fontStyle}
+      floatingLabelFocusStyle={formFocusStyle}
+      underlineFocusStyle={formFocusStyle}
+      hintText={label}
+      floatingLabelText={label}
+      fullWidth={true}
+      type={type}
+      errorStyle={errorStyle}
+      errorText={touched && (errorMsg || error)}
+      {...input}
+    />
+  );
+
+  renderField = curry((errorMsg, { label, name, type }) => (
+    <div key={label}>
+      <Field
+        errorMsg={errorMsg}
+        label={label}
+        name={name}
         type={type}
-        errorStyle={errorStyle}
-        errorText={touched && (errorMsg || error)}
-        {...input}
+        component={this.renderTextField}
       />
-    );
-  };
+    </div>
+  ));
 
-  renderField = curry((errorMsg, { label, name, type }) => {
-    if (name !== 'username') {
-      errorMsg = '';
-    }
-
-    return (
-      <div key={label}>
-        <Field
-          label={label}
-          name={name}
-          type={type}
-          errorMsg={errorMsg}
-          component={this.renderTextField}
-        />
-      </div>
-    );
-  });
-
-  renderFields = (errorMsg) => map(this.renderField(errorMsg), formFields);
+  renderFields = (signInFields, errorMsg) => map(this.renderField(errorMsg), signInFields);
 
   render() {
     const { handleSubmit, errorMsg, location: { pathname } } = this.props;
+    const [firstName, ...signInFields] = formFields; // don't render firstName on sign in form
 
     return (
       <Wrapper>
         <FormWrapper onSubmit={handleSubmit(this.handleFormSubmit)} pathname={pathname}>
-          <Title>Get started absolutely free!</Title>
+          <Title>Welcome Back!</Title>
           <Form>
-            {this.renderFields(errorMsg)}
+            {this.renderFields(signInFields, errorMsg)}
             <Btn style={btnStyle} type="submit">
-              Sign up
+              Sign in
             </Btn>
           </Form>
         </FormWrapper>
@@ -107,5 +93,5 @@ const mapStateToProps = (state) => ({
 export default reduxForm({
   validate,
   form: 'signUp',
-  fields: ['firstName', 'username', 'password']
-})(connect(mapStateToProps, { signUpUser })(SignUp));
+  fields: ['username', 'password']
+})(connect(mapStateToProps, { signInUser })(SignIn));

@@ -8,9 +8,9 @@ export const Wrapper = styled.div`
 
 export const FormWrapper = styled.div`
   box-shadow: rgba(29, 29, 31, 0.15) 0 10px 60px;
+  height: ${(props) => (props.pathname === '/signup' ? '400px' : '350px')};
   border-radius: 4px;
   padding: 3rem 2.5rem 0;
-  height: 400px;
 `;
 
 export const Title = styled.span`
@@ -18,7 +18,10 @@ export const Title = styled.span`
   font-weight: 300;
   letter-spacing: 2px;
   border-bottom: 1px solid #dee7ec;
+  width: 100%;
   padding-bottom: 10px;
+  display: inline-block;
+  text-align: center;
 `;
 
 export const Form = styled.form`

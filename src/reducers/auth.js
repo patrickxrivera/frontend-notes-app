@@ -1,8 +1,7 @@
 import { handleActions } from 'redux-actions';
 
 const initialState = {
-  isAuthenticated: false,
-  errorMsg: ''
+  isAuthenticated: false
 };
 
 export default handleActions(
@@ -12,17 +11,9 @@ export default handleActions(
       return {
         ...state,
         isAuthenticated: true,
-        errorMsg: '',
         token,
         userId,
         firstName
-      };
-    },
-    AUTH_ERROR: (state, action) => {
-      const error = action.payload;
-      return {
-        ...state,
-        errorMsg: error
       };
     }
   },
@@ -30,5 +21,3 @@ export default handleActions(
 );
 
 export const getAuthStatusFrom = (state) => state.auth.isAuthenticated;
-
-export const getErrorMsgFrom = (state) => state.auth.errorMsg;
