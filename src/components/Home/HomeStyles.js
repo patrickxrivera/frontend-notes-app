@@ -47,7 +47,7 @@ export const Btn = styled.button`
   border-radius: 3px;
   text-align: center;
   font-weight: 500;
-  height: 30px;
+  height: 35px;
   background: rgba(235, 87, 87, 0.03);
   color: rgb(235, 87, 87);
   border: 1px solid rgb(249, 200, 200);

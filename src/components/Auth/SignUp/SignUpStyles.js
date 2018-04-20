@@ -29,3 +29,9 @@ export const btnStyle = {
   marginTop: '3rem',
   textTransform: 'uppercase'
 };
+
+export const formFocusStyle = { color: '#2dacf1ff' };
+
+export const fontStyle = { fontFamily: 'inherit' };
+
+export const errorStyle = { float: 'left' };
