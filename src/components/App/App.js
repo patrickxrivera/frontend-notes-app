@@ -7,7 +7,7 @@ import SignUp from '../Auth/SignUp/SignUp';
 import SignIn from '../Auth/SignIn/SignIn';
 import RequireAuth from '../Auth/RequireAuth/RequireAuth';
 import Workspace from '../Workspace/Workspace';
-import { Wrapper } from './AppStyles';
+import { Wrapper, AppStyles } from './AppStyles';
 
 const App = () => (
   <MuiThemeProvider>
