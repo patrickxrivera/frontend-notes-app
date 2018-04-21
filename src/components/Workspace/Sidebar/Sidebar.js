@@ -14,15 +14,11 @@ import {
   SearchWrapper,
   OptionsText,
   optionsIconStyles,
-  PagesMenu,
-  PagesMenuText,
-  MenuItem,
-  MenuItemWrapper,
   faStyles,
-  StyledCaret,
   NewPageWrapper,
   BottomWrapper
 } from './SidebarStyles.js';
+import PagesMenu from './PagesMenu/PagesMenu';
 import { getFirstNameFrom } from '../../../reducers/auth';
 import { format } from './helpers';
 
@@ -49,28 +45,7 @@ class Sidebar extends Component {
                 </SearchWrapper>
               </div>
             </div>
-            <PagesMenu>
-              <div>
-                <MenuItemWrapper>
-                  <MenuItem>
-                    <StyledCaret size={18} />
-                    <PagesMenuText>Engineering</PagesMenuText>
-                  </MenuItem>
-                </MenuItemWrapper>
-                <MenuItemWrapper>
-                  <MenuItem>
-                    <StyledCaret size={18} />
-                    <PagesMenuText>Ideas</PagesMenuText>
-                  </MenuItem>
-                </MenuItemWrapper>
-                <MenuItemWrapper>
-                  <MenuItem>
-                    <StyledCaret size={18} />
-                    <PagesMenuText>To-do List</PagesMenuText>
-                  </MenuItem>
-                </MenuItemWrapper>
-              </div>
-            </PagesMenu>
+            <PagesMenu />
           </div>
           <BottomWrapper>
             <Add size={20} color="rgba(0, 0, 0, 0.2)" />
