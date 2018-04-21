@@ -21,3 +21,5 @@ export default handleActions(
 );
 
 export const getAuthStatusFrom = (state) => state.auth.isAuthenticated;
+
+export const getFirstNameFrom = (state) => state.auth.firstName;
