@@ -6,6 +6,7 @@ import initialValue from './value.json';
 import PageTitle from '../PageTitle/PageTitle';
 import { isKeyHotkey } from 'is-hotkey';
 import { Wrapper, EditorWrapper } from './EditorAreaStyles';
+import './styles.css';
 
 /**
  * Define the default node type.
@@ -258,6 +259,7 @@ class EditorArea extends React.Component {
         <PageTitle />
         <EditorWrapper>
           <Editor
+            className="editorStyles"
             placeholder="Enter some rich text..."
             value={this.state.value}
             onChange={this.onChange}
