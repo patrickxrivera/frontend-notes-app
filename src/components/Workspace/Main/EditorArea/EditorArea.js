@@ -260,7 +260,7 @@ class EditorArea extends React.Component {
         <EditorWrapper>
           <Editor
             className="editorStyles"
-            placeholder="Enter some rich text..."
+            placeholder="Type '/' for commands"
             value={this.state.value}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
