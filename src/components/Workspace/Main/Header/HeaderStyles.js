@@ -18,7 +18,7 @@ export const IconWrapper = styled.div`
     transition: background 0.1s ease-in;
   }
   border-radius: 3px;
-  padding: 0 3px;
+  padding: 0 2px;
 `;
 
 export const Options = styled.div`

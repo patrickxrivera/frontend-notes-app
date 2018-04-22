@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Header from './Header/Header';
-// import Editor from './Editor/Editor';
+import EditorArea from './EditorArea/EditorArea';
 import { Wrapper } from './MainStyles.js';
 
 class Main extends Component {
@@ -9,7 +9,7 @@ class Main extends Component {
     return (
       <Wrapper>
         <Header />
-        <div>Editor</div>
+        <EditorArea />
       </Wrapper>
     );
   }

@@ -16,6 +16,7 @@ export const MenuItem = styled.div`
 `;
 
 export const MenuItemWrapper = styled.div`
+  width: 100%;
   padding: 3px 0;
   &:hover {
     background: rgba(58, 56, 52, 0.08);
