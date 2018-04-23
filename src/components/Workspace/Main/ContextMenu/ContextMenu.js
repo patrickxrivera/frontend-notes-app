@@ -1,40 +1,48 @@
 import React, { Component } from 'react';
+import { curry } from 'ramda';
+import map from 'lodash/map';
 
-import { Wrapper, Title, OptionWrapper, Heading, Description } from './ContextMenuStyles';
+import basicBlocks from './data';
+import {
+  Title,
+  OptionWrapper,
+  Heading,
+  Description,
+  isActive,
+  subMenuStyles
+} from './ContextMenuStyles';
 import './styles.css';
 
 class ContextMenu extends Component {
+  componentDidMount() {
+    this.scrollToPosition();
+  }
+
+  scrollToPosition = () => {
+    this.refs.elem.scrollTop = 340;
+  };
+
+  setBasicBlockStyle = (cursor, idx) => (cursor === idx ? { ...isActive } : {});
+
+  renderBasicBlock = curry((cursor, { title, description }, idx) => (
+    <OptionWrapper key={title} style={this.setBasicBlockStyle(cursor, idx)}>
+      <Heading>{title}</Heading>
+      <Description>{description}.</Description>
+    </OptionWrapper>
+  ));
+
+  renderContextMenu = (cursor) => map(basicBlocks, this.renderBasicBlock(cursor));
+
   render() {
+    const { cursor } = this.props;
+
     return (
-      <Wrapper>
+      <div style={subMenuStyles} ref="elem">
         <div autoFocus={true}>
           <Title>Basic Blocks</Title>
         </div>
-        <OptionWrapper>
-          <Heading>Text</Heading>
-          <Description>Just start writing with plain text</Description>
-        </OptionWrapper>
-        <OptionWrapper>
-          <Heading>Bulleted List</Heading>
-          <Description>Create a simple bulleted list.</Description>
-        </OptionWrapper>
-        <OptionWrapper>
-          <Heading>Numbered List</Heading>
-          <Description>Create a list with numbering.</Description>
-        </OptionWrapper>
-        <OptionWrapper>
-          <Heading>Text</Heading>
-          <Description>Just start writing with plain text</Description>
-        </OptionWrapper>
-        <OptionWrapper>
-          <Heading>Bulleted List</Heading>
-          <Description>Create a simple bulleted list.</Description>
-        </OptionWrapper>
-        <OptionWrapper>
-          <Heading>Numbered List</Heading>
-          <Description>Create a list with numbering.</Description>
-        </OptionWrapper>
-      </Wrapper>
+        {this.renderContextMenu(cursor)}
+      </div>
     );
   }
 }

@@ -71,6 +71,7 @@ class SignUp extends Component {
     );
   });
 
+  // TODO: Make this a variable instead of a function
   renderFields = (errorMsg) => map(this.renderField(errorMsg), formFields);
 
   render() {

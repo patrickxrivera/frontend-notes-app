@@ -19,7 +19,8 @@ const isCodeHotkey = isKeyHotkey('mod+`');
 class EditorArea extends React.Component {
   state = {
     value: Value.fromJSON(initialValue),
-    showMenu: false
+    showMenu: false,
+    cursor: 0
   };
 
   hasMark = (type) => {
@@ -37,7 +38,7 @@ class EditorArea extends React.Component {
   };
 
   onKeyDown = (event, change) => {
-    this.handleKeyPress(event);
+    this.handleContextMenu(event);
 
     let mark;
 
@@ -64,9 +65,26 @@ class EditorArea extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleContextMenu = (e) => {
+    // TODO: Clean this ish up
+    const { cursor } = this.state;
+
     if (e.key === '/') {
       this.setState({ showMenu: !this.state.showMenu });
+    }
+
+    if (e.key === 'ArrowUp') {
+      if (cursor === 0) {
+        this.setState({ cursor: 8 });
+        return;
+      }
+      this.setState({ cursor: this.state.cursor - 1 });
+    } else if (e.key === 'ArrowDown') {
+      if (cursor === 8) {
+        this.setState({ cursor: 0 });
+        return;
+      }
+      this.setState({ cursor: this.state.cursor + 1 });
     }
   };
 
@@ -154,6 +172,8 @@ class EditorArea extends React.Component {
   };
 
   renderEditor = () => {
+    const { cursor } = this.state;
+
     return (
       <Wrapper className="editor">
         <PageTitle />
@@ -171,7 +191,7 @@ class EditorArea extends React.Component {
             autoFocus
           />
           <div className="context-menu context-menu--active">
-            <ContextMenu />
+            <ContextMenu cursor={cursor} />
           </div>
         </EditorWrapper>
       </Wrapper>

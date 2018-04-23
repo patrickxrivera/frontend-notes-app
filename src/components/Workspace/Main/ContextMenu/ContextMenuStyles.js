@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   position: relative;
   width: 324px;
   z-index: 99;
-  height: 280px;
+  height: 263px;
   display: flex;
   flex-direction: column;
   overflow: scroll;
@@ -48,3 +48,21 @@ export const OptionWrapper = styled.div`
     cursor: pointer;
   }
 `;
+
+export const isActive = {
+  background: 'rgba(58, 56, 52, 0.08)',
+  transition: 'all 140ms ease-in',
+  cursor: 'pointer'
+};
+
+export const subMenuStyles = {
+  borderRadius: '3px',
+  background: 'white',
+  boxShadow: 'rgba(84, 70, 35, 0.3) 0px 6px 20px',
+  position: 'relative',
+  width: '324px',
+  height: '263px',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'scroll'
+};
