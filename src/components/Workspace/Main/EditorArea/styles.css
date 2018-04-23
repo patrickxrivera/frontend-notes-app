@@ -2,3 +2,13 @@
   margin: 7px 0;
   width: 80%;
 }
+
+.context-menu {
+  display: none;
+  position: absolute;
+  z-index: 10;
+}
+
+.context-menu--active {
+  display: block;
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from './Header/Header';
 import EditorArea from './EditorArea/EditorArea';
+import ContextMenu from './ContextMenu/ContextMenu';
 import { Wrapper } from './MainStyles.js';
 
 class Main extends Component {

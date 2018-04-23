@@ -6,87 +6,39 @@ import initialValue from './value.json';
 import PageTitle from '../PageTitle/PageTitle';
 import { isKeyHotkey } from 'is-hotkey';
 import { Wrapper, EditorWrapper } from './EditorAreaStyles';
+import ContextMenu from '../ContextMenu/ContextMenu';
 import './styles.css';
 
-/**
- * Define the default node type.
- *
- * @type {String}
- */
-
 const DEFAULT_NODE = 'paragraph';
-
-/**
- * Define hotkey matchers.
- *
- * @type {Function}
- */
 
 const isBoldHotkey = isKeyHotkey('mod+b');
 const isItalicHotkey = isKeyHotkey('mod+i');
 const isUnderlinedHotkey = isKeyHotkey('mod+u');
 const isCodeHotkey = isKeyHotkey('mod+`');
 
-/**
- * The rich text example.
- *
- * @type {Component}
- */
-
 class EditorArea extends React.Component {
-  /**
-   * Deserialize the initial editor value.
-   *
-   * @type {Object}
-   */
-
   state = {
-    value: Value.fromJSON(initialValue)
+    value: Value.fromJSON(initialValue),
+    showMenu: false
   };
-
-  /**
-   * Check if the current selection has a mark with `type` in it.
-   *
-   * @param {String} type
-   * @return {Boolean}
-   */
 
   hasMark = (type) => {
     const { value } = this.state;
     return value.activeMarks.some((mark) => mark.type == type);
   };
 
-  /**
-   * Check if the any of the currently selected blocks are of `type`.
-   *
-   * @param {String} type
-   * @return {Boolean}
-   */
-
   hasBlock = (type) => {
     const { value } = this.state;
     return value.blocks.some((node) => node.type == type);
   };
 
-  /**
-   * On change, save the new `value`.
-   *
-   * @param {Change} change
-   */
-
   onChange = ({ value }) => {
     this.setState({ value });
   };
 
-  /**
-   * On key down, if it's a formatting command toggle a mark.
-   *
-   * @param {Event} event
-   * @param {Change} change
-   * @return {Change}
-   */
-
   onKeyDown = (event, change) => {
+    this.handleKeyPress(event);
+
     let mark;
 
     if (isBoldHotkey(event)) {
@@ -106,12 +58,17 @@ class EditorArea extends React.Component {
     return true;
   };
 
-  /**
-   * When a mark button is clicked, toggle the current mark.
-   *
-   * @param {Event} event
-   * @param {String} type
-   */
+  handleClick = () => {
+    if (this.state.showMenu) {
+      this.setState({ showMenu: false });
+    }
+  };
+
+  handleKeyPress = (e) => {
+    if (e.key === '/') {
+      this.setState({ showMenu: !this.state.showMenu });
+    }
+  };
 
   onClickMark = (event, type) => {
     event.preventDefault();
@@ -119,13 +76,6 @@ class EditorArea extends React.Component {
     const change = value.change().toggleMark(type);
     this.onChange(change);
   };
-
-  /**
-   * When a block button is clicked, toggle the block type.
-   *
-   * @param {Event} event
-   * @param {String} type
-   */
 
   onClickBlock = (event, type) => {
     event.preventDefault();
@@ -170,12 +120,6 @@ class EditorArea extends React.Component {
     this.onChange(change);
   };
 
-  /**
-   * Render.
-   *
-   * @return {Element}
-   */
-
   render() {
     return (
       <div>
@@ -184,36 +128,6 @@ class EditorArea extends React.Component {
       </div>
     );
   }
-
-  /**
-   * Render the toolbar.
-   *
-   * @return {Element}
-   */
-
-  // renderToolbar = () => {
-  //   return (
-  //     <div className="menu toolbar-menu">
-  //       {this.renderMarkButton('bold', 'format_bold')}
-  //       {this.renderMarkButton('italic', 'format_italic')}
-  //       {this.renderMarkButton('underlined', 'format_underlined')}
-  //       {this.renderMarkButton('code', 'code')}
-  //       {this.renderBlockButton('heading-one', 'looks_one')}
-  //       {this.renderBlockButton('heading-two', 'looks_two')}
-  //       {this.renderBlockButton('block-quote', 'format_quote')}
-  //       {this.renderBlockButton('numbered-list', 'format_list_numbered')}
-  //       {this.renderBlockButton('bulleted-list', 'format_list_bulleted')}
-  //     </div>
-  //   );
-  // };
-
-  /**
-   * Render a mark-toggling toolbar button.
-   *
-   * @param {String} type
-   * @param {String} icon
-   * @return {Element}
-   */
 
   renderMarkButton = (type, icon) => {
     const isActive = this.hasMark(type);
@@ -227,14 +141,6 @@ class EditorArea extends React.Component {
     );
   };
 
-  /**
-   * Render a block-toggling toolbar button.
-   *
-   * @param {String} type
-   * @param {String} icon
-   * @return {Element}
-   */
-
   renderBlockButton = (type, icon) => {
     const isActive = this.hasBlock(type);
     const onMouseDown = (event) => this.onClickBlock(event, type);
@@ -247,12 +153,6 @@ class EditorArea extends React.Component {
     );
   };
 
-  /**
-   * Render the Slate editor.
-   *
-   * @return {Element}
-   */
-
   renderEditor = () => {
     return (
       <Wrapper className="editor">
@@ -264,22 +164,19 @@ class EditorArea extends React.Component {
             value={this.state.value}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
+            onClick={this.handleClick}
             renderNode={this.renderNode}
             renderMark={this.renderMark}
             spellCheck
             autoFocus
           />
+          <div className="context-menu context-menu--active">
+            <ContextMenu />
+          </div>
         </EditorWrapper>
       </Wrapper>
     );
   };
-
-  /**
-   * Render a Slate node.
-   *
-   * @param {Object} props
-   * @return {Element}
-   */
 
   renderNode = (props) => {
     const { attributes, children, node } = props;
@@ -299,13 +196,6 @@ class EditorArea extends React.Component {
     }
   };
 
-  /**
-   * Render a Slate mark.
-   *
-   * @param {Object} props
-   * @return {Element}
-   */
-
   renderMark = (props) => {
     const { children, mark } = props;
     switch (mark.type) {
@@ -320,9 +210,5 @@ class EditorArea extends React.Component {
     }
   };
 }
-
-/**
- * Export.
- */
 
 export default EditorArea;
