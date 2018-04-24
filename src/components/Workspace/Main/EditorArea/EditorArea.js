@@ -20,6 +20,7 @@ class EditorArea extends React.Component {
   state = {
     value: Value.fromJSON(initialValue),
     showMenu: false,
+    reset: false,
     cursor: 0
   };
 
@@ -67,19 +68,25 @@ class EditorArea extends React.Component {
 
   handleContextMenu = (e) => {
     // TODO: Clean this ish up
-    const { cursor } = this.state;
+    const { cursor, showMenu } = this.state;
 
     if (e.key === '/') {
-      this.setState({ showMenu: !this.state.showMenu });
+      if (showMenu) {
+        this.setState({ cursor: 0, reset: true, showMenu: false });
+        return;
+      }
+      this.setState({ showMenu: true, reset: false });
     }
 
-    if (e.key === 'ArrowUp') {
+    if (showMenu && e.key === 'ArrowUp') {
+      e.preventDefault();
       if (cursor === 0) {
         this.setState({ cursor: 7 });
         return;
       }
       this.setState({ cursor: this.state.cursor - 1 });
-    } else if (e.key === 'ArrowDown') {
+    } else if (showMenu && e.key === 'ArrowDown') {
+      e.preventDefault();
       if (cursor === 7) {
         this.setState({ cursor: 0 });
         return;
@@ -139,12 +146,7 @@ class EditorArea extends React.Component {
   };
 
   render() {
-    return (
-      <div>
-        {/* {this.renderToolbar()} */}
-        {this.renderEditor()}
-      </div>
-    );
+    return <div>{this.renderEditor()}</div>;
   }
 
   renderMarkButton = (type, icon) => {
@@ -172,7 +174,7 @@ class EditorArea extends React.Component {
   };
 
   renderEditor = () => {
-    const { cursor } = this.state;
+    const { cursor, showMenu, reset } = this.state;
 
     return (
       <Wrapper className="editor">
@@ -190,8 +192,8 @@ class EditorArea extends React.Component {
             spellCheck
             autoFocus
           />
-          <div className="context-menu context-menu--active">
-            <ContextMenu cursor={cursor} />
+          <div className={`context-menu ${showMenu ? 'context-menu--active' : ''}`}>
+            <ContextMenu reset={reset} cursor={cursor} />
           </div>
         </EditorWrapper>
       </Wrapper>

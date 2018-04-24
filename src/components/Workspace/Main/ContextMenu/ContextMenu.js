@@ -23,8 +23,34 @@ class ContextMenu extends Component {
     scrollAmount: 53
   };
 
-  scrollToPosition = (cursor) => {
+  componentDidUpdate(prevProps) {
+    if (prevProps === this.props) return;
+
     const { elem } = this.refs;
+    const { reset, cursor } = this.props;
+    const { isScrollMode, upperBound, lowerBound } = this.state;
+
+    if (!reset && elem) {
+      this.handleScroll(cursor, elem);
+      return;
+    }
+
+    this.resetElem();
+
+    this.setState({
+      isScrollMode: false,
+      upperBound: 0,
+      lowerBound: 4
+    });
+  }
+
+  resetElem = () => {
+    console.log(this.refs.elem.scrollTop);
+    this.refs.elem.scrollTop = 0;
+    console.log(this.refs.elem.scrollTop);
+  };
+
+  handleScroll = (cursor, elem) => {
     const { isScrollMode, lowerBound, upperBound } = this.state;
 
     const INITIAL_SCROLL = 30;
@@ -43,21 +69,52 @@ class ContextMenu extends Component {
   // TODO: DRY this up
   handleScrollDown = (elem) => {
     const { upperBound, lowerBound, scrollAmount } = this.state;
+    const { cursor } = this.props;
 
-    this.setState({ upperBound: upperBound + 1, lowerBound: lowerBound + 1 }, () => {
+    if (cursor === 7) {
+      elem.scrollTop = elem.scrollHeight;
+      this.setState({ upperBound: 3, lowerBound: 7 });
+    } else {
       elem.scrollTop += scrollAmount;
-    });
+      this.setState({ upperBound: upperBound + 1, lowerBound: lowerBound + 1 });
+    }
   };
 
   handleScrollUp = (elem) => {
     const { upperBound, lowerBound, scrollAmount } = this.state;
+    const { cursor } = this.props;
 
-    this.setState({ upperBound: upperBound - 1, lowerBound: lowerBound - 1 }, () => {
+    if (cursor === 0) {
+      elem.scrollTop = 0;
+      this.setState({ upperBound: 0, lowerBound: 4 });
+    } else {
       elem.scrollTop -= scrollAmount;
-    });
+      this.setState({ upperBound: upperBound - 1, lowerBound: lowerBound - 1 });
+    }
   };
 
   setBasicBlockStyle = (cursor, idx) => (cursor === idx ? { ...isActive } : {});
+
+  render() {
+    const { cursor } = this.props;
+
+    return (
+      // TODO: Create better spacing on scroll
+      <div style={subMenuStyles} ref="elem">
+        {this.renderTitle()}
+        {this.renderContextMenu(cursor)}
+      </div>
+    );
+  }
+
+  renderTitle = () =>
+    !this.state.isScrollMode && (
+      <div>
+        <Title>Basic Blocks</Title>
+      </div>
+    );
+
+  renderContextMenu = (cursor) => map(basicBlocks, this.renderBasicBlock(cursor));
 
   renderBasicBlock = curry((cursor, { title, description }, idx) => (
     <OptionWrapper key={title} style={this.setBasicBlockStyle(cursor, idx)}>
@@ -67,28 +124,6 @@ class ContextMenu extends Component {
       </div>
     </OptionWrapper>
   ));
-
-  renderContextMenu = (cursor) => map(basicBlocks, this.renderBasicBlock(cursor));
-
-  render() {
-    const { cursor } = this.props;
-    const { isScrollMode } = this.state;
-
-    // TODO: Find a better place to put this
-    if (this.refs.elem) this.scrollToPosition(cursor);
-
-    return (
-      // TODO: Create better spacing on scroll
-      <div style={subMenuStyles} ref="elem">
-        {!isScrollMode && (
-          <div>
-            <Title>Basic Blocks</Title>
-          </div>
-        )}
-        {this.renderContextMenu(cursor)}
-      </div>
-    );
-  }
 }
 
 export default ContextMenu;
