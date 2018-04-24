@@ -4,6 +4,7 @@ import { Value } from 'slate';
 import React from 'react';
 import initialValue from './value.json';
 import PageTitle from '../PageTitle/PageTitle';
+import basicBlocks from '../ContextMenu/data';
 import { isKeyHotkey } from 'is-hotkey';
 import { Wrapper, EditorWrapper } from './EditorAreaStyles';
 import ContextMenu from '../ContextMenu/ContextMenu';
@@ -81,17 +82,17 @@ class EditorArea extends React.Component {
     if (showMenu && e.key === 'ArrowUp') {
       e.preventDefault();
       if (cursor === 0) {
-        this.setState({ cursor: 7 });
-        return;
+        this.setState({ cursor: basicBlocks.length - 1 });
+      } else {
+        this.setState({ cursor: this.state.cursor - 1 });
       }
-      this.setState({ cursor: this.state.cursor - 1 });
     } else if (showMenu && e.key === 'ArrowDown') {
       e.preventDefault();
-      if (cursor === 7) {
+      if (cursor === basicBlocks.length - 1) {
         this.setState({ cursor: 0 });
-        return;
+      } else {
+        this.setState({ cursor: this.state.cursor + 1 });
       }
-      this.setState({ cursor: this.state.cursor + 1 });
     }
   };
 
@@ -192,7 +193,10 @@ class EditorArea extends React.Component {
             spellCheck
             autoFocus
           />
-          <div className={`context-menu ${showMenu ? 'context-menu--active' : ''}`}>
+          <div
+            className={`context-menu ${
+              showMenu ? 'context-menu__on-enter' : 'context-menu__on-leave'
+            }`}>
             <ContextMenu reset={reset} cursor={cursor} />
           </div>
         </EditorWrapper>

@@ -20,16 +20,12 @@ const basicBlocks = [
     description: 'Create a list with numbering.'
   },
   {
-    title: 'Thing',
-    description: 'Just start writing with plain text'
+    title: 'To-do List',
+    description: 'Track tasks with a to-do list'
   },
   {
-    title: 'Another Thing',
-    description: 'A large header with margin'
-  },
-  {
-    title: 'More Things',
-    description: 'A smaller header'
+    title: 'Divider',
+    description: 'Visually divide blocks'
   }
 ];
 

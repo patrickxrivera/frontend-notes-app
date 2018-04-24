@@ -32,16 +32,14 @@ class ContextMenu extends Component {
 
     if (!reset && elem) {
       this.handleScroll(cursor, elem);
-      return;
+    } else {
+      elem.scrollTop = 0;
+      this.setState({
+        isScrollMode: false,
+        upperBound: 0,
+        lowerBound: 4
+      });
     }
-
-    this.resetElem();
-
-    this.setState({
-      isScrollMode: false,
-      upperBound: 0,
-      lowerBound: 4
-    });
   }
 
   resetElem = () => {
@@ -71,9 +69,9 @@ class ContextMenu extends Component {
     const { upperBound, lowerBound, scrollAmount } = this.state;
     const { cursor } = this.props;
 
-    if (cursor === 7) {
+    if (cursor === basicBlocks.length - 1) {
       elem.scrollTop = elem.scrollHeight;
-      this.setState({ upperBound: 3, lowerBound: 7 });
+      this.setState({ upperBound: basicBlocks.length - 5, lowerBound: basicBlocks.length - 1 });
     } else {
       elem.scrollTop += scrollAmount;
       this.setState({ upperBound: upperBound + 1, lowerBound: lowerBound + 1 });

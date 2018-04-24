@@ -9,6 +9,29 @@
   z-index: 10;
 }
 
-.context-menu--active {
+@keyframes context-menu__popIn {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes context-menu__popOut {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.context-menu__on-enter {
   display: block;
+  animation: context-menu__popIn 0.3s cubic-bezier(0.51, 0.92, 0.24, 1.2);
+}
+
+.context-menu__on-leave {
+  animation: context-menu__popOut 0.3s cubic-bezier(0.51, 0.92, 0.24, 1.2);
 }

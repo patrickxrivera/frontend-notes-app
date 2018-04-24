@@ -11,3 +11,9 @@
 .context-menu__item {
   list-style-type: none;
 }
+
+.svg__wrapper {
+  border: 2px solid red;
+  width: 30px;
+  height: 30px;
+}
