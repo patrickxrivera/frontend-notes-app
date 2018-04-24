@@ -40,20 +40,28 @@ class EditorArea extends React.Component {
   };
 
   onKeyDown = (event, change) => {
-    this.handleContextMenu(event);
+    this.setContextMenuState(event);
+    this.handleHotkeyPress(event, change);
+  };
 
+  handleHotkeyPress = (event, change) => {
     let mark;
 
-    if (isBoldHotkey(event)) {
-      mark = 'bold';
-    } else if (isItalicHotkey(event)) {
-      mark = 'italic';
-    } else if (isUnderlinedHotkey(event)) {
-      mark = 'underlined';
-    } else if (isCodeHotkey(event)) {
-      mark = 'code';
-    } else {
-      return;
+    switch (true) {
+      case isBoldHotkey(event):
+        mark = 'bold';
+        break;
+      case isItalicHotkey(event):
+        mark = 'italic';
+        break;
+      case isUnderlinedHotkey(event):
+        mark = 'underlined';
+        break;
+      case isCodeHotkey(event):
+        mark = 'code';
+        break;
+      default:
+        return;
     }
 
     event.preventDefault();
@@ -67,36 +75,39 @@ class EditorArea extends React.Component {
     }
   };
 
-  handleContextMenu = (e) => {
-    // TODO: Clean this ish up
+  setContextMenuState = (e) => {
+    this.handleEscapeKeyPress(e);
+    this.handleSlashKeyPress(e);
+    this.handleArrowKeyPress(e);
+  };
+
+  handleEscapeKeyPress = (e) => {
+    if (e.key === 'Escape') this.setState({ cursor: 0, showMenu: false });
+  };
+
+  handleSlashKeyPress = (e) => {
+    e.key === '/'
+      ? this.setState({ showMenu: true, reset: true })
+      : this.setState({ reset: false });
+  };
+
+  handleArrowKeyPress = (e) => {
     const { cursor, showMenu } = this.state;
 
-    if (e.key === 'Escape') {
-      this.setState({ cursor: 0, showMenu: false });
-      return;
-    }
+    switch (true) {
+      case showMenu && e.key === 'ArrowUp':
+        e.preventDefault();
+        cursor === 0
+          ? this.setState({ cursor: basicBlocks.length - 1 })
+          : this.setState({ cursor: this.state.cursor - 1 });
+        break;
 
-    if (e.key === '/') {
-      this.setState({ showMenu: true, reset: true });
-      return;
-    } else {
-      this.setState({ reset: false });
-    }
-
-    if (showMenu && e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (cursor === 0) {
-        this.setState({ cursor: basicBlocks.length - 1 });
-      } else {
-        this.setState({ cursor: this.state.cursor - 1 });
-      }
-    } else if (showMenu && e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (cursor === basicBlocks.length - 1) {
-        this.setState({ cursor: 0 });
-      } else {
-        this.setState({ cursor: this.state.cursor + 1 });
-      }
+      case showMenu && e.key === 'ArrowDown':
+        e.preventDefault();
+        cursor === basicBlocks.length - 1
+          ? this.setState({ cursor: 0 })
+          : this.setState({ cursor: this.state.cursor + 1 });
+        break;
     }
   };
 
