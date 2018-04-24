@@ -71,12 +71,16 @@ class EditorArea extends React.Component {
     // TODO: Clean this ish up
     const { cursor, showMenu } = this.state;
 
+    if (e.key === 'Escape') {
+      this.setState({ cursor: 0, showMenu: false });
+      return;
+    }
+
     if (e.key === '/') {
-      if (showMenu) {
-        this.setState({ cursor: 0, reset: true, showMenu: false });
-        return;
-      }
-      this.setState({ showMenu: true, reset: false });
+      this.setState({ showMenu: true, reset: true });
+      return;
+    } else {
+      this.setState({ reset: false });
     }
 
     if (showMenu && e.key === 'ArrowUp') {

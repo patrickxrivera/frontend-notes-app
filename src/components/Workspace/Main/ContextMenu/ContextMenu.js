@@ -23,29 +23,28 @@ class ContextMenu extends Component {
     scrollAmount: 53
   };
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (prevProps === this.props) return;
 
     const { elem } = this.refs;
     const { reset, cursor } = this.props;
     const { isScrollMode, upperBound, lowerBound } = this.state;
 
-    if (!reset && elem) {
-      this.handleScroll(cursor, elem);
-    } else {
-      elem.scrollTop = 0;
-      this.setState({
+    if (reset && elem) {
+      this.resetElem(elem);
+
+      await this.setState({
         isScrollMode: false,
         upperBound: 0,
         lowerBound: 4
       });
     }
+
+    this.handleScroll(cursor, elem);
   }
 
-  resetElem = () => {
-    console.log(this.refs.elem.scrollTop);
-    this.refs.elem.scrollTop = 0;
-    console.log(this.refs.elem.scrollTop);
+  resetElem = (elem) => {
+    elem.scrollTop = 0;
   };
 
   handleScroll = (cursor, elem) => {
