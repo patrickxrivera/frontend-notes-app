@@ -75,12 +75,12 @@ class EditorArea extends React.Component {
 
     if (e.key === 'ArrowUp') {
       if (cursor === 0) {
-        this.setState({ cursor: 8 });
+        this.setState({ cursor: 7 });
         return;
       }
       this.setState({ cursor: this.state.cursor - 1 });
     } else if (e.key === 'ArrowDown') {
-      if (cursor === 8) {
+      if (cursor === 7) {
         this.setState({ cursor: 0 });
         return;
       }
