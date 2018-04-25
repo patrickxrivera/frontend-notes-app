@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Wrapper = styled.div`
   color: rgb(66, 66, 65);
@@ -10,4 +10,41 @@ export const EditorWrapper = styled.div`
   margin-top: 2rem;
   font-size: 16px;
   line-height: 1.5;
+`;
+
+export const ContextMenuWrapper = styled.div`
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  animation: ${({ showMenu, x, y }) =>
+    showMenu
+      ? `${popEnter(x, y)} 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`
+      : `${popLeave(x, y)} 400ms`};
+`;
+
+export const popEnter = (x, y) => keyframes`
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(${x}px, ${y}px) scale(0.9);
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(${x}px, ${y}px) scale(1);
+  }
+`;
+
+export const popLeave = (x, y) => keyframes`
+  0% {
+    opacity: 1;
+    transform: translate(${x}px, ${y}px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(${x}px, ${y}px);
+  }
 `;

@@ -3,10 +3,12 @@
   width: 80%;
 }
 
-.context-menu {
+/* .context-menu {
   display: none;
   position: absolute;
-  z-index: 10;
+  z-index: 999;
+  top: 0,
+  left: 0,
 }
 
 @keyframes context-menu__popIn {
@@ -34,4 +36,4 @@
 
 .context-menu__on-leave {
   animation: context-menu__popOut 200ms cubic-bezier(0.51, 0.92, 0.24, 1.2);
-}
+} */

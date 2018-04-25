@@ -6,7 +6,7 @@ import initialValue from './value.json';
 import PageTitle from '../PageTitle/PageTitle';
 import basicBlocks from '../ContextMenu/data';
 import { isKeyHotkey } from 'is-hotkey';
-import { Wrapper, EditorWrapper } from './EditorAreaStyles';
+import { Wrapper, EditorWrapper, ContextMenuWrapper } from './EditorAreaStyles';
 import ContextMenu from '../ContextMenu/ContextMenu';
 import './styles.css';
 
@@ -22,7 +22,11 @@ class EditorArea extends React.Component {
     value: Value.fromJSON(initialValue),
     showMenu: false,
     reset: false,
-    cursor: 0
+    cursor: 0,
+    coords: {
+      x: null,
+      y: null
+    }
   };
 
   hasMark = (type) => {
@@ -35,11 +39,11 @@ class EditorArea extends React.Component {
     return value.blocks.some((node) => node.type == type);
   };
 
-  onChange = ({ value }) => {
+  handleChange = ({ value }) => {
     this.setState({ value });
   };
 
-  onKeyDown = (event, change) => {
+  handleKeyDown = (event, change) => {
     this.setContextMenuState(event);
     this.handleHotkeyPress(event, change);
   };
@@ -85,10 +89,27 @@ class EditorArea extends React.Component {
     if (e.key === 'Escape') this.setState({ cursor: 0, showMenu: false });
   };
 
-  handleSlashKeyPress = (e) => {
-    e.key === '/'
-      ? this.setState({ showMenu: true, reset: true })
-      : this.setState({ reset: false });
+  handleSlashKeyPress = async (e) => {
+    if (e.key !== '/') {
+      await this.setState({ reset: false });
+      return;
+    }
+
+    await this.getCoords();
+
+    this.setState({ showMenu: true, reset: true });
+  };
+
+  getCoords = async () => {
+    const { x, y } = window
+      .getSelection()
+      .getRangeAt(0)
+      .getBoundingClientRect();
+
+    // copy state's coords
+    let coords = { ...this.state.coords };
+    coords = { x, y };
+    await this.setState({ coords });
   };
 
   handleArrowKeyPress = (e) => {
@@ -190,7 +211,7 @@ class EditorArea extends React.Component {
   };
 
   renderEditor = () => {
-    const { cursor, showMenu, reset } = this.state;
+    const { cursor, showMenu, reset, coords: { x, y } } = this.state;
 
     return (
       <Wrapper className="editor">
@@ -200,20 +221,17 @@ class EditorArea extends React.Component {
             className="editorStyles"
             placeholder="Type '/' for commands"
             value={this.state.value}
-            onChange={this.onChange}
-            onKeyDown={this.onKeyDown}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
             onClick={this.handleClick}
             renderNode={this.renderNode}
             renderMark={this.renderMark}
             spellCheck
             autoFocus
           />
-          <div
-            className={`context-menu ${
-              showMenu ? 'context-menu__on-enter' : 'context-menu__on-leave'
-            }`}>
+          <ContextMenuWrapper showMenu={showMenu} x={x} y={y}>
             <ContextMenu reset={reset} cursor={cursor} />
-          </div>
+          </ContextMenuWrapper>
         </EditorWrapper>
       </Wrapper>
     );
