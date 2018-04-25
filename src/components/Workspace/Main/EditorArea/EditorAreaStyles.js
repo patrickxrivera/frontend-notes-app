@@ -18,11 +18,8 @@ export const ContextMenuWrapper = styled.div`
   top: 0;
   left: 0;
   opacity: 0;
-  visibility: hidden;
   animation: ${({ showMenu, x, y }) =>
-    showMenu
-      ? `${popEnter(x, y)} 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`
-      : `${popLeave(x, y)} 400ms`};
+    showMenu ? `${popEnter(x, y)} 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards` : ''};
 `;
 
 export const popEnter = (x, y) => keyframes`
@@ -35,16 +32,5 @@ export const popEnter = (x, y) => keyframes`
     visibility: visible;
     opacity: 1;
     transform: translate(${x}px, ${y}px) scale(1);
-  }
-`;
-
-export const popLeave = (x, y) => keyframes`
-  0% {
-    opacity: 1;
-    transform: translate(${x}px, ${y}px);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(${x}px, ${y}px);
   }
 `;

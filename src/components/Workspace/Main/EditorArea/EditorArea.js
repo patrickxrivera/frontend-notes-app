@@ -101,6 +101,9 @@ class EditorArea extends React.Component {
   };
 
   getCoords = async () => {
+    const X_OFFSET = 9;
+    const Y_OFFSET = 20;
+
     const { x, y } = window
       .getSelection()
       .getRangeAt(0)
@@ -108,7 +111,7 @@ class EditorArea extends React.Component {
 
     // copy state's coords
     let coords = { ...this.state.coords };
-    coords = { x, y };
+    coords = { x: x + X_OFFSET, y: y + Y_OFFSET };
     await this.setState({ coords });
   };
 
