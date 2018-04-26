@@ -29,11 +29,6 @@ class EditorArea extends React.Component {
     }
   };
 
-  hasMark = (type) => {
-    const { value } = this.state;
-    return value.activeMarks.some((mark) => mark.type == type);
-  };
-
   hasBlock = (type) => {
     const { value } = this.state;
     return value.blocks.some((node) => node.type == type);
@@ -43,64 +38,60 @@ class EditorArea extends React.Component {
     this.setState({ value });
   };
 
-  handleKeyDown = (event, change) => {
-    this.setContextMenuState(event);
-    this.handleHotkeyPress(event, change);
+  resetContextMenu = () => {
+    this.setState({ reset: true, cursor: 0, showMenu: false });
   };
 
-  handleHotkeyPress = (event, change) => {
+  handleKeyDown = (e, change) => {
+    this.setContextMenuState(e);
+    this.handleHotkeyPress(e, change);
+  };
+
+  handleHotkeyPress = (e, change) => {
     let mark;
 
     switch (true) {
-      case isBoldHotkey(event):
+      case isBoldHotkey(e):
         mark = 'bold';
         break;
-      case isItalicHotkey(event):
+      case isItalicHotkey(e):
         mark = 'italic';
         break;
-      case isUnderlinedHotkey(event):
+      case isUnderlinedHotkey(e):
         mark = 'underlined';
         break;
-      case isCodeHotkey(event):
+      case isCodeHotkey(e):
         mark = 'code';
         break;
       default:
         return;
     }
 
-    event.preventDefault();
+    e.preventDefault();
     change.toggleMark(mark);
     return true;
   };
 
   handleClick = () => {
-    if (this.state.showMenu) {
-      this.setState({ showMenu: false });
-    }
+    if (this.state.showMenu) this.resetContextMenu();
   };
 
   setContextMenuState = (e) => {
-    this.handleEscapeKeyPress(e);
     this.handleSlashKeyPress(e);
     this.handleArrowKeyPress(e);
-  };
-
-  handleEscapeKeyPress = (e) => {
-    if (e.key === 'Escape') this.setState({ cursor: 0, showMenu: false });
+    this.handleEnterKeyPress(e);
+    this.handleEscapeKeyPress(e);
   };
 
   handleSlashKeyPress = async (e) => {
-    if (e.key !== '/') {
-      await this.setState({ reset: false });
-      return;
+    if (e.key === '/') {
+      await this.getCoords();
+      this.setState({ showMenu: true });
     }
-
-    await this.getCoords();
-
-    this.setState({ showMenu: true, reset: true });
   };
 
   getCoords = async () => {
+    // position context menu to the right of the text caret
     const X_OFFSET = 9;
     const Y_OFFSET = 20;
 
@@ -109,7 +100,7 @@ class EditorArea extends React.Component {
       .getRangeAt(0)
       .getBoundingClientRect();
 
-    // copy state's coords
+    // copy state's coords and reset state with x and y
     let coords = { ...this.state.coords };
     coords = { x: x + X_OFFSET, y: y + Y_OFFSET };
     await this.setState({ coords });
@@ -135,18 +126,24 @@ class EditorArea extends React.Component {
     }
   };
 
-  onClickMark = (event, type) => {
-    event.preventDefault();
-    const { value } = this.state;
-    const change = value.change().toggleMark(type);
-    this.onChange(change);
+  handleEnterKeyPress = (e) => {
+    const { cursor, showMenu } = this.state;
+
+    if (showMenu && e.key === 'Enter') {
+      const { type } = basicBlocks[cursor];
+      this.handleBlockEvent(e, type);
+    }
   };
 
-  onClickBlock = (event, type) => {
-    event.preventDefault();
+  handleEscapeKeyPress = (e) => {
+    if (e.key === 'Escape') this.resetContextMenu();
+  };
+
+  handleBlockEvent = (e, type) => {
+    e.preventDefault();
     const { value } = this.state;
-    const change = value.change();
     const { document } = value;
+    const change = value.change();
 
     // Handle everything but list buttons.
     if (type != 'bulleted-list' && type != 'numbered-list') {
@@ -182,36 +179,19 @@ class EditorArea extends React.Component {
       }
     }
 
-    this.onChange(change);
+    this.handleChange(change);
+    this.resetContextMenu();
+  };
+
+  handleKeyPress = (event) => {
+    if (event.charCode == 13) {
+      event.preventDefault();
+    }
   };
 
   render() {
     return <div>{this.renderEditor()}</div>;
   }
-
-  renderMarkButton = (type, icon) => {
-    const isActive = this.hasMark(type);
-    const onMouseDown = (event) => this.onClickMark(event, type);
-
-    return (
-      // eslint-disable-next-line react/jsx-no-bind
-      <span className="button" onMouseDown={onMouseDown} data-active={isActive}>
-        <span className="material-icons">{icon}</span>
-      </span>
-    );
-  };
-
-  renderBlockButton = (type, icon) => {
-    const isActive = this.hasBlock(type);
-    const onMouseDown = (event) => this.onClickBlock(event, type);
-
-    return (
-      // eslint-disable-next-line react/jsx-no-bind
-      <span className="button" onMouseDown={onMouseDown} data-active={isActive}>
-        <span className="material-icons">{icon}</span>
-      </span>
-    );
-  };
 
   renderEditor = () => {
     const { cursor, showMenu, reset, coords: { x, y } } = this.state;
@@ -226,14 +206,15 @@ class EditorArea extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}
+            onKeyPress={this.handleKeyPress}
             onClick={this.handleClick}
             renderNode={this.renderNode}
             renderMark={this.renderMark}
-            spellCheck
-            autoFocus
+            spellCheck={true}
+            autoFocus={true}
           />
           <ContextMenuWrapper showMenu={showMenu} x={x} y={y}>
-            <ContextMenu reset={reset} cursor={cursor} />
+            <ContextMenu handleBlockEvent={this.handleBlockEvent} reset={reset} cursor={cursor} />
           </ContextMenuWrapper>
         </EditorWrapper>
       </Wrapper>

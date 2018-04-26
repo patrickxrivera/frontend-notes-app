@@ -113,8 +113,11 @@ class ContextMenu extends Component {
 
   renderContextMenu = (cursor) => map(basicBlocks, this.renderBasicBlock(cursor));
 
-  renderBasicBlock = curry((cursor, { title, description }, idx) => (
-    <OptionWrapper key={title} style={this.setBasicBlockStyle(cursor, idx)}>
+  renderBasicBlock = curry((cursor, { title, description, type }, idx) => (
+    <OptionWrapper
+      onClick={(e) => this.props.handleBlockEvent(e, type)}
+      key={title}
+      style={this.setBasicBlockStyle(cursor, idx)}>
       <div style={blockContainerStyle}>
         <Heading>{title}</Heading>
         <Description>{description}.</Description>
